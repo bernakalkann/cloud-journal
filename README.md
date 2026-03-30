@@ -42,7 +42,8 @@ Proje, yüksek erişilebilirlik ve ölçeklenebilirlik ilkelerine uygun olarak i
 Ödev gereksinimlerine uygun olarak gerçekleştirilen bulut adımları aşağıdadır:
 
 ### **1. AWS S3 (Statik Web Sitesi Yayını)**
-- **Bucket Ayarları:** "Block Public Access" ayarı kapatıldı ve `index.html` ana sayfa olarak belirlendi.
+- **Bucket Adı:** `cloud-journal-frontend`
+- **S3 Ayarları:** "Block Public Access" ayarı kapatıldı ve `index.html` ana sayfa olarak belirlendi.
 - **Bucket Policy:** İnternet üzerinden erişim için aşağıdaki JSON politikası uygulandı:
   ```json
   {

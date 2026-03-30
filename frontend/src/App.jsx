@@ -5,6 +5,9 @@ import FocusTimer from './components/FocusTimer';
 import MemePanel from './components/MemePanel';
 import DiarySection from './components/DiarySection';
 import LoginScreen from './components/LoginScreen';
+import LiveClock from './components/LiveClock';
+import WeatherWidget from './components/WeatherWidget';
+import QuoteWidget from './components/QuoteWidget';
 import { exportToPdf } from './utils/pdfGenerator';
 
 function App() {
@@ -82,7 +85,7 @@ function App() {
       exportToPdf(tasks, fetchedDiaries);
     } catch (err) {
       console.error('PDF Export Error:', err);
-      alert('PDF oluşturulamadı! Lütfen sunucunun açık olduğundan emin olun.');
+      alert('PDF oluşturulamadı!');
     }
   };
 
@@ -99,58 +102,105 @@ function App() {
     <div className="app-window">
       <HeroBanner onLogout={handleLogout} />
       
-      <div className="content-wrapper">
-        <div className="column-left" id="blog-section">
-          <DiarySection />
+      {/* Step 3: Metrics Section (Weather, Clock, Quote) */}
+      <section className="section-full section-light">
+        <div className="main-grid" style={{ gap: '2rem', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
+          <div className="metric-card">
+             <div className="metric-label">🕒 LIVE PERFORMANCE</div>
+             <LiveClock />
+          </div>
+          <div className="metric-card">
+             <div className="metric-label">🌤️ ATMOSPHERE</div>
+             <WeatherWidget />
+          </div>
+          <div className="metric-card">
+             <div className="metric-label">💡 CREATIVE SPARK</div>
+             <QuoteWidget />
+          </div>
         </div>
+      </section>
 
-        <div className="column-right">
+      {/* Step 2: Pomodoro Space Section */}
+      <section className="section-full section-dark" id="timer-section">
+        <div className="stardust"></div>
+        <FocusTimer />
+      </section>
 
-          <div className="paper-block" id="tasks-section">
-            <div className="paper-block-title" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '0 0 1rem 0', borderBottom: '1px dashed #d1d5db', paddingBottom: '0.5rem' }}>
-              <span style={{ borderBottom: 'none', margin: 0, padding: 0 }}>DAILY TASKS</span>
-              <button onClick={handleExportPDF} style={{ background: '#ef4444', color: 'white', border: 'none', padding: '0.3rem 0.6rem', cursor: 'pointer', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold' }}>
-                📄 EXPORT PDF
-              </button>
-            </div>
-            <form onSubmit={submitTask} style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
-              <input 
-                type="text" 
-                className="paper-input" 
-                style={{marginTop: 0, padding: '0.5rem'}}
-                placeholder="Yenisini ekle..." 
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-              <button type="submit" className="blog-btn" style={{marginTop: 0, padding: '0.5rem 1rem'}}>+</button>
-            </form>
+      {/* Step 4: Content Section (Journal & Tasks) */}
+      <section className="section-full section-warm">
+        <main className="main-grid">
+          <div className="diary-column" id="blog-section">
+            <DiarySection />
+          </div>
 
-            {loading ? (
-              <p>Yükleniyor...</p>
-            ) : (
-              <ul className="clean-list">
+          <aside className="side-panels" id="tasks-section">
+            <div className="metric-card" style={{ padding: '2rem' }}>
+              <div className="section-header">
+                <span className="serif-font" style={{ fontSize: '1.75rem' }}>Daily Tasks</span>
+                <button onClick={handleExportPDF} className="btn-vibrant" style={{ padding: '0.4rem 1rem', fontSize: '0.75rem' }}>
+                  EXPORT
+                </button>
+              </div>
+
+              <form onSubmit={submitTask} style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem' }}>
+                <input 
+                  type="text" 
+                  style={{ 
+                    flex: 1, 
+                    padding: '0.8rem', 
+                    borderRadius: '12px', 
+                    border: '1px solid var(--border-color)',
+                    fontSize: '0.9rem'
+                  }}
+                  placeholder="New goal..." 
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+                <button type="submit" className="btn-vibrant" style={{ padding: '0.8rem 1.2rem' }}>+</button>
+              </form>
+
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                 {tasks.map(task => (
-                  <li key={task.id} className={task.completed ? 'completed' : ''}>
-                    <div className="task-content" onClick={() => toggleTask(task.id)}>
-                      <div className={`checkbox-box ${task.completed ? 'checked' : ''}`}>
-                        {task.completed ? '✓' : ''}
-                      </div>
-                      <span className="task-text" style={{fontSize: '0.9rem'}}>{task.title}</span>
-                    </div>
-                    <button className="delete-sm" onClick={() => deleteTask(task.id)}>×</button>
+                  <li key={task.id} style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    padding: '1rem', 
+                    background: task.completed ? '#f8fafc' : '#ffffff',
+                    border: '1px solid var(--border-color)',
+                    marginBottom: '0.75rem',
+                    borderRadius: '12px',
+                    transition: 'all 0.2s'
+                  }}>
+                    <input 
+                      type="checkbox" 
+                      checked={task.completed} 
+                      onChange={() => toggleTask(task.id)}
+                      style={{ transform: 'scale(1.2)', marginRight: '1rem', cursor: 'pointer' }}
+                    />
+                    <span style={{ 
+                      flex: 1, 
+                      fontSize: '0.95rem', 
+                      textDecoration: task.completed ? 'line-through' : 'none',
+                      color: task.completed ? 'var(--text-muted)' : 'var(--text-main)',
+                      fontWeight: task.completed ? 400 : 500
+                    }}>
+                      {task.title}
+                    </span>
+                    <button 
+                      style={{ background: 'none', border: 'none', color: '#ff4d4d', cursor: 'pointer', fontSize: '1.2rem' }} 
+                      onClick={() => deleteTask(task.id)}
+                    >
+                      ×
+                    </button>
                   </li>
                 ))}
               </ul>
-            )}
-          </div>
+            </div>
 
-          <div className="floating-panels">
-             <FocusTimer />
-             <MemePanel />
-          </div>
-
-        </div>
-      </div>
+            <MemePanel />
+          </aside>
+        </main>
+      </section>
     </div>
   );
 }
