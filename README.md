@@ -1,58 +1,96 @@
-# Cloud Journal - Bulut Bilişim Projesi
+# ☁️ Cloud Journal: Dual-Tier Architect Space
 
-Ders: 3522 Bulut Bilişim
-Geliştirici: Berna Kalkan
-Açılabilir Site Linki: http://cloud-journal-site.s3-website.eu-north-1.amazonaws.com 
-Proje Sunum Videosu: [***]
+**3522 BULUT BİLİŞİM DERSİ PROJE 1**
+**Öğrenci:** Berna Kalkan
+**Platform:** AWS (S3 + EC2)
+**Açılabilir Site Linki:** [http://cloud-journal-site.s3-website.eu-north-1.amazonaws.com](http://cloud-journal-site.s3-website.eu-north-1.amazonaws.com)
 
-## Proje Hakkında
+---
 
-Bu proje, 3522 Bulut Bilişim dersi kapsamında geliştirilmiş çift katmanlı (two-tier) bir web uygulamasıdır. Proje, birbirinden tamamen bağımsız olarak çalışan bir RESTful API (Backend) ve kullanıcı arayüzünden (Frontend) oluşmaktadır. Sistemin tamamı Amazon Web Services (AWS) altyapısı kullanılarak bulut ortamında barındırılmaktadır.
+## 📌 Proje Özeti
+**Cloud Journal**, mimarlar ve yaratıcı profesyoneller için tasarlanmış, **Dual-Tier (Çift Katmanlı)** mimariye sahip modern bir web uygulamasıdır. Uygulama, odaklanma sayacı (Pomodoro), hava durumu takibi, günlük tutma ve PDF dışa aktarma gibi özelliklerle donatılmış, tam kapsamlı bir bulut bilişim projesidir.
 
-## Mimari ve Kullanılan Teknolojiler
+---
 
-Proje, bulut bilişim prensiplerine uygun olarak iki ana bileşene ayrılmıştır:
+## 🛠️ Teknoloji Yığını (Tech Stack)
 
-### 1. Backend (Web API)
-Teknoloji: Node.js, Express.js
-Bulut Sağlayıcı: AWS EC2 (Elastic Compute Cloud)
-Süreç Yönetimi: PM2
-Açıklama: Uygulamanın API sunucusu AWS EC2 üzerinde yapılandırılmıştır. Sunucuya SSH ile bağlanılarak Node.js ortamı kurulmuş ve uygulamanın kesintisiz çalışması için PM2 kullanılmıştır. Veriler bu RESTful API üzerinden yönetilmektedir.
+### **Frontend**
+- **Framework:** React (Vite)
+- **Styling:** Vanilla CSS (Custom Design System)
+- **Deployment:** AWS S3 (Static Website Hosting)
+- **Libraries:** html2canvas, jspdf (PDF Export), Weather/Quote API integrations.
 
-### 2. Frontend (Kullanıcı Arayüzü)
-Teknoloji: JavaScript, HTML, CSS, Vite
-Bulut Sağlayıcı: AWS S3 (Simple Storage Service)
-Açıklama: Kullanıcı arayüzü modern web standartlarında geliştirilmiş ve derlenen statik dosyalar AWS S3 üzerinde barındırılmıştır. Frontend, EC2 üzerindeki API ile HTTP istekleri aracılığıyla haberleşmektedir.
+### **Backend**
+- **Runtime:** Node.js
+- **Framework:** Express.js
+- **Process Manager:** PM2 (Proses Yönetimi)
+- **Deployment:** AWS EC2 (Elastic Compute Cloud)
 
-## API Uç Noktaları (Endpoints)
+---
 
-GET /api/notes
-İşlev: Sistemdeki tüm notları listeler.
+## 🏗️ Sistem Mimarisi (Architecture)
 
-POST /api/notes
-İşlev: Sisteme yeni bir not ekler.
+Proje, yüksek erişilebilirlik ve ölçeklenebilirlik ilkelerine uygun olarak iki ayrı bulut katmanına ayrılmıştır:
 
-PUT /api/notes/:id
-İşlev: Belirtilen ID değerine sahip notu günceller.
+1.  **Frontend Katmanı (Presentation):** React ile inşa edilmiş statik dosyalar (HTML, CSS, JS), AWS S3 bucket içerisinde barındırılmaktadır. 
+2.  **Backend Katmanı (Logic):** Node.js API uygulaması, bir AWS EC2 instance üzerinde çalışmaktadır. RESTful API üzerinden veri alışverişi sağlanmaktadır.
 
-DELETE /api/notes/:id
-İşlev: Belirtilen ID değerine sahip notu siler.
+---
 
-## Kurulum ve Çalıştırma (Lokal Geliştirme)
+## 🚀 Bulut Dağıtım Günlüğü (Deployment Log)
 
-Projeyi yerel ortamda çalıştırmak için aşağıdaki adımları izleyebilirsiniz:
+Ödev gereksinimlerine uygun olarak gerçekleştirilen bulut adımları aşağıdadır:
 
-1. Depoyu bilgisayarınıza klonlayın:
-git clone [https://github.com/bernakalkann/cloud-journal.git](https://github.com/bernakalkann/cloud-journal.git)
-cd cloud-journal
+### **1. AWS S3 (Statik Web Sitesi Yayını)**
+- **Bucket Ayarları:** "Block Public Access" ayarı kapatıldı ve `index.html` ana sayfa olarak belirlendi.
+- **Bucket Policy:** İnternet üzerinden erişim için aşağıdaki JSON politikası uygulandı:
+  ```json
+  {
+    "Version": "2012-10-17",
+    "Statement": [{
+      "Sid": "PublicRead",
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::benimsitem1/*"
+    }]
+  }
+  ```
 
-2. Backend sunucusunu başlatın:
-cd backend
-npm install
-node server.js
-(API, varsayılan olarak http://localhost:3001 adresinde çalışacaktır.)
+### **2. AWS EC2 (Backend Sunucusu)**
+- **Instance:** Amazon Linux 2 t2.micro instance ayağa kaldırıldı.
+- **Sunucu Yönetimi:** Node.js ve PM2 kurulumu yapılarak, API servisinin 7/24 aktif olması sağlandı.
+- **Port Yönetimi:** `3001` portu Security Group üzerinden erişime açıldı.
 
-3. Frontend sunucusunu başlatın:
-cd ../frontend
-npm install
-npm run dev
+---
+
+## ✨ Ana Özellikler
+- **Focus Timer:** Uzay temalı, minimalist odaklanma sayacı.
+- **Diary System:** Günlük girişi oluşturma, listeleme ve profesyonel PDF çıktısı alma.
+- **Weather Widget:** Gerçek zamanlı şehir bazlı hava durumu takibi.
+- **Pop-Art Joke Panel:** Günlük dozajda motivasyon ve mizah karesi.
+- **Modern UI:** "Mango Marketing" ve "Space/Purple" tasarım dillerinin hibrit birleşimi.
+
+---
+
+## 📦 Kurulum ve Çalıştırma
+
+### **Yerel Çalıştırma (Development)**
+1.  `cd frontend && npm install && npm run dev`
+2.  `cd backend && npm install && node server.js`
+
+### **Derleme (Build)**
+- `npm run build` komutu ile `/dist` klasörüne optimize edilmiş çıktı üretilir.
+
+---
+
+## 🎥 Video Sunum Planı
+Ödevin bir parçası olan 10 dakikalık sunum videosunda aşağıdaki başlıklar ele alınmaktadır:
+1.  AWS S3 Bucket oluşturma ve Policy ayarları.
+2.  React projesinin build edilmesi ve S3'e yüklenmesi.
+3.  EC2 instance yapılandırması ve PM2 ile API yayını.
+4.  Frontend ve Backend katmanlarının entegrasyonu.
+5.  Uygulama özelliklerinin demosu.
+
+---
+**GitHub:** [https://github.com/bernakalkann/cloud-journal](https://github.com/bernakalkann/cloud-journal)
