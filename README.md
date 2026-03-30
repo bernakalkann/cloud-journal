@@ -2,7 +2,8 @@
 
 Ders: 3522 Bulut Bilişim
 Geliştirici: Berna Kalkan
-Proje Sunum Videosu: [YouTube veya Drive Linki Buraya Eklenecek]
+Açılabilir Site Linki: http://cloud-journal-site.s3-website.eu-north-1.amazonaws.com 
+Proje Sunum Videosu: [***]
 
 ## Proje Hakkında
 
