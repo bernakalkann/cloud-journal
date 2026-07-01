@@ -3,7 +3,7 @@ Cloud Journal
 3522 BULUT BİLİŞİM DERSİ PROJE 1
 Berna Kalkan
 Platform:AWS (S3 + EC2)
-Açılabilir Site Linki:(http://cloud-journal-site.s3-website.eu-north-1.amazonaws.com)
+Açılabilir Site Linki:(http://cloud-journal-site.s3-website.eu-north-1.amazonaws.com) **Amazon kredi harcamaları sebebiyle geçici olarak kapatılmıştır.**
 
 ---
 Proje Özeti
